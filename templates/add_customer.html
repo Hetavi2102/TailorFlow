@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Customer</title>
+</head>
+<body>
+
+    <h1>
+    {{ "Edit Customer" if customer else "Add Customer" }}
+    </h1>
+
+    <form action="{{ url_for('add_customer') }}" method="POST">
+        
+        <input type="hidden" name="customer_id" value="{{ customer.customer_id if customer else '' }}">
+
+        <label>Full Name</label><br>
+        <input type="text" name="full_name" value="{{ customer.full_name if customer else '' }}" required><br><br>
+
+        <label>Phone Number</label><br>
+        <input type="text" name="phone_no" value="{{ customer.phone_no if customer else '' }}" required><br><br>
+
+        <label>Email</label><br>
+        <input type="email" name="email" value="{{ customer.email if customer else '' }}"><br><br>
+
+        <label>Address</label><br>
+        <textarea name="address">{{ customer.address if customer else '' }}</textarea><br><br>
+
+        <button type="submit">
+            {{ "Update Customer" if customer else "Add Customer" }}
+        </button>
+
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customers</title>
+</head>
+<body>
+
+    <h1>Customer List</h1>
+    <h2>Search Customer</h2>
+
+    <form method="GET">
+        
+        <input
+            type="text"
+            name="phone_no"
+            placeholder="Enter phone number"
+            value="{{ phone_no or '' }}">
+        
+        <button type="submit">Search</button>
+    </form>
+
+    <br>
+
+    <table border="1">
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for customer in customers %}
+
+        <tr>
+            <td>{{ customer.customer_id }}</td>
+            <td>{{ customer.full_name }}</td>
+            <td>{{ customer.phone_no }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.address }}</td>
+            <td>
+                <a href="/measurements/{{ customer.customer_id }}">
+                    Measurements
+                </a>
+
+                |
+
+                <a href="/edit-customer/{{ customer.customer_id }}">
+                    Edit
+                </a>
+
+                |
+
+                <a href="/delete-customer/{{ customer.customer_id }}"
+                    onclick="return confirm('Are you sure you want to delete this customer?')">
+                    Delete
+                </a>"
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>

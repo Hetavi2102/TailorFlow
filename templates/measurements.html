@@ -1,0 +1,32 @@
+<h1>Measurements for {{ customer.full_name }}</h1>
+
+<p><strong>Phone:</strong> {{ customer.phone_no }}</p>
+
+<hr>
+
+<form method="POST">
+    <label>Garment Type</label><br>
+    <input type="text" name="garment_type" value="{{ measurement.garment_type if measurement else '' }}"  required><br></br>
+
+    <label>Chest</label><br>
+    <input type="text" name="chest" value="{{ measurement.chest if measurement else '' }}"  required><br></br>
+
+    <label>Shoulder</label><br>
+    <input type="text" name="shoulder" value="{{ measurement.shoulder if measurement else '' }}"  required><br></br>
+ 
+    <label>Length</label><br>
+    <input type="text" name="length" value="{{ measurement.length if measurement else '' }}"  required><br></br>
+
+    <label>Sleeve</label><br>
+    <input type="text" name="sleeve" value="{{ measurement.sleeve if measurement else '' }}"  required><br></br>
+    
+    <label>Waist</label><br>
+    <input type="text" name="waist" value="{{ measurement.waist if measurement else '' }}"  required><br></br>
+    
+    <label>Notes</label><br>
+    <input type="text" name="notes" value="{{ measurement.notes if measurement else '' }}"  required><br></br>
+
+    <button type="submit">
+        {{ "Update Measurements" if measurement else "Add Measurements"}}
+    </button>
+</form>
