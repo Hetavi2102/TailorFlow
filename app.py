@@ -135,15 +135,21 @@ def delete_customer(customer_id):
 @app.route("/measurements/<int:customer_id>", methods=["GET","POST"])
 def measurements(customer_id):
 
+    connection, cursor = get_cursor()
+
     if request.method == "POST":
 
-        garment_type = request.form["garment_type"]
-        chest = request.form["chest"]
-        shoulder = request.form["shoulder"]
-        length = request.form["length"]
-        sleeve = request.form["sleeve"]
-        waist= request.form["waist"]
-        notes = request.form["notes"]
+        print("POST request received")
+
+        garment_type = request.form["garment_type"] 
+        chest = request.form["chest"] or None
+        shoulder = request.form["shoulder"] or None
+        length = request.form["length"] or None
+        sleeve = request.form["sleeve"] or None
+        waist= request.form["waist"] or None
+        notes = request.form["notes"] or None
+
+        print(customer_id, garment_type, chest, shoulder, length, sleeve, waist, notes)
 
         query = """
         INSERT INTO measurement
@@ -151,14 +157,22 @@ def measurements(customer_id):
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
 
         values = (customer_id, garment_type, chest, shoulder, length, sleeve, waist, notes)
+
+        print(values)
+
+        cursor.execute(query, values)
+
+        print("Executed!")
+
+        connection.commit()
+
+        print("Committed!")
    
         return redirect(
             url_for(
                 "measurements",
                 customer_id=customer_id)
             )
-    
-    connection, cursor = get_cursor()
 
     cursor.execute(
         """
@@ -171,11 +185,25 @@ def measurements(customer_id):
 
     customer = cursor.fetchone()
 
+    cursor.execute(
+        """
+        SELECT * 
+        FROM measurement
+        WHERE customer_id = %s
+        ORDER BY measurement_date DESC
+        """,
+        (customer_id,)
+    )
+
+    measurements = cursor.fetchall()
+
     cursor.close()
+    connection.close()
 
     return render_template(
         "measurements.html",
-        customer=customer
+        customer=customer,
+        measurements=measurements
     )
 
 if __name__ == "__main__":

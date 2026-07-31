@@ -9,24 +9,50 @@
     <input type="text" name="garment_type" value="{{ measurement.garment_type if measurement else '' }}"  required><br></br>
 
     <label>Chest</label><br>
-    <input type="text" name="chest" value="{{ measurement.chest if measurement else '' }}"  required><br></br>
+    <input type="text" name="chest" value="{{ measurement.chest if measurement else '' }}" ><br></br>
 
     <label>Shoulder</label><br>
-    <input type="text" name="shoulder" value="{{ measurement.shoulder if measurement else '' }}"  required><br></br>
+    <input type="text" name="shoulder" value="{{ measurement.shoulder if measurement else '' }}" ><br></br>
  
     <label>Length</label><br>
-    <input type="text" name="length" value="{{ measurement.length if measurement else '' }}"  required><br></br>
+    <input type="text" name="length" value="{{ measurement.length if measurement else '' }}" ><br></br>
 
     <label>Sleeve</label><br>
-    <input type="text" name="sleeve" value="{{ measurement.sleeve if measurement else '' }}"  required><br></br>
+    <input type="text" name="sleeve" value="{{ measurement.sleeve if measurement else '' }}"><br></br>
     
     <label>Waist</label><br>
-    <input type="text" name="waist" value="{{ measurement.waist if measurement else '' }}"  required><br></br>
+    <input type="text" name="waist" value="{{ measurement.waist if measurement else '' }}"><br></br>
     
     <label>Notes</label><br>
-    <input type="text" name="notes" value="{{ measurement.notes if measurement else '' }}"  required><br></br>
+    <input type="text" name="notes" value="{{ measurement.notes if measurement else '' }}"><br></br>
 
     <button type="submit">
         {{ "Update Measurements" if measurement else "Add Measurements"}}
     </button>
 </form>
+
+<h2>Measurement History</h2>
+{% if measurements %}
+    
+    {% for measurement in measurements %}
+        <div>
+            <h3>{{ measurement.garment_type }}</h3>
+        
+            <p><strong>Date:</strong> {{ measurement.measurement_date }}</p>
+            <p><strong>Chest:</strong> {{ measurement.chest or "-" }}</p>
+            <p><strong>Shoulder:</strong> {{ measurement.shoulder or "-" }}</p>
+            <p><strong>Sleeve:</strong> {{ measurement.sleeve or "-" }}</p>
+            <p><strong>Length:</strong> {{ measurement.length or "-" }}</p>
+            <p><strong>Waist:</strong> {{ measurement.waist or "-" }}</p>
+            <p><strong>Notes:</strong> {{ measurement.notes or "-" }}</p>
+
+            <hr>
+        </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No measurements found.</p>
+
+{% endif %}
