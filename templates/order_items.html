@@ -1,0 +1,88 @@
+
+<h1>Add Order Items</h1>
+
+<p><strong>Order ID:</strong> {{ order.order_id }}</p>
+
+<hr>
+
+<form method="POST" action="{{ url_for('order_items', order_id=order.order_id) }}">
+
+    <input type ="hidden" name="item_id" value="{{ item.item_id if item else '' }}">
+
+    <label>Product Name</label><br>
+    <input type="text" name="product_name" value="{{ item.product_name if item else '' }} " required><br></br>>
+
+    <label>Measurement</label><br>
+    <select name="measurement_id">
+
+        {% for measurement in measurements %}
+            <option 
+                value="{{ measurement.measurement_id }}"
+                {% if item and item.measurement_id == measurement.measurement_id %}
+                    selected
+                {% endif %}
+            >
+        {% endfor %}
+    </select><br></br>
+
+    <label>Quantity</label><br>
+    <input type="number" name="quantity" value="{{ item.quantity if item else '' }}"><br></br>
+
+    <label>Unit Price</label><br>
+    <input type="number" name="unit_price" value="{{ item.unit_price if item else '' }}"><br></br>
+
+    <label>Status</label><br>
+    <select name="item_status">
+        <option value="Pending" {% if item and item.item_status == "Pending" %} selected {% endif %}>Pending</option>
+        <option value="Cutting" {% if item and item.item_status == "Cutting" %} selected {% endif %}>Cutting</option>
+        <option value="Stitching" {% if item and item.item_status == "Stitching" %} selected {% endif %}>Stitching</option>
+        <option value="Ready" {% if item and item.item_status == "Ready" %} selected {% endif %}>Ready</option>
+        <option value="Delivered" {% if item and item.item_status == "Delivered" %} selected {% endif %}>Delivered</option>
+    </select><br></br>
+
+    <label>Special Instructions</label><br>
+    <input type="text" name="special_instruction" value="{{ item.special_instruction if item else '' }}"></textarea><br></br>
+
+    <button type="submit">{{ "Update Item" if item else "Add Item" }}</button>
+
+</form>
+
+<h2>Order Items</h2>
+
+{% if items %}
+
+    {% for item in items %}
+
+        <p><strong>{{ item.product_name }}</strong></p>
+
+        <p>Quantity : {{ item.quantity }}</p>
+
+        <p>Status : {{ item.item_status }}</p>
+
+        <p>Unit Price : {{ item.unit_price}}</p>
+
+        <p>{{ item.special_instruction }}</p>
+
+        <a href="{{ url_for('edit_order_item', item_id=item.item_id) }}">
+            <button>Edit</button>
+        </a>
+
+
+
+        <a href="{{ url_for('delete_order_item', item_id=item.item_id) }}">
+            <button>Delete</button>
+        </a>
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No items added yet.</p>
+
+{% endif %}
+
+<a href="{{ url_for('orders') }}">
+    <button>Finish Order</button>
+</a>

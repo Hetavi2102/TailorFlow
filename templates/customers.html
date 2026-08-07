@@ -57,6 +57,12 @@
                     onclick="return confirm('Are you sure you want to delete this customer?')">
                     Delete
                 </a>"
+
+                |
+
+                <a href="{{ url_for('add_order', customer_id=customer.customer_id) }}">
+                    Add Order
+                </a>
             </td>
         </tr>
 

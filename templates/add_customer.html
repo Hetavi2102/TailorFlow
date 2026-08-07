@@ -12,6 +12,7 @@
     <form action="{{ url_for('add_customer') }}" method="POST">
         
         <input type="hidden" name="customer_id" value="{{ customer.customer_id if customer else '' }}">
+        <input type="hidden" name="customer_id" value="{{ customer.customer_id }}">
 
         <label>Full Name</label><br>
         <input type="text" name="full_name" value="{{ customer.full_name if customer else '' }}" required><br><br>

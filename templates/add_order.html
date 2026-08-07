@@ -1,0 +1,31 @@
+<h1>Add Order</h1>
+
+<p><strong>Customer:</strong> {{ customer.full_name }}</p>
+<p><strong>Phone:</strong> {{ customer.phone_no }}</p>
+
+<hr>
+
+<form method="POST">
+    <label>Order Date</label><br>
+    <input type="date" name="order_date" value="{{ orders.order_date if orders else '' }}" required><br></br>
+
+    <label>Delivery Date</label><br>
+    <input type="date" name="delivery_date" value="{{ orders.delivery_date if orders else '' }}" required><br></br>
+    
+    <label>Total Amount</label><br>
+    <input type="text" name="total_amount" value="{{ orders.total_amount if orders else '' }}" required><br></br>
+
+    
+    <label>Status</label><br>
+    <select name="current_status">
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Ready">Ready</option>
+        <option value="Delivered">Delivered</option>
+    </select><br></br>
+
+
+    <button type="submit">
+        {{ "Order placed" if orders else "Place your Order"}}
+    </button>
+</from>

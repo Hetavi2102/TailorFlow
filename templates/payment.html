@@ -1,0 +1,74 @@
+<h1>Payment Module</h1>
+
+<p><strong>Customer:</strong> {{ customer.full_name }}</p>
+
+<p><strong>Order ID:</strong> {{ order.order_id }}</p>
+
+<p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+
+<hr>
+
+<h2>Add Payment</h2>
+
+<form method="POST">
+
+    <label>Amount</label><br>
+    <input type="number" name="amount" step="0.01" required><br><br>
+
+    <label>Payment Method</label><br>
+    <select name="payment_method">
+        <option value="Cash">Cash</option>
+        <option value="UPI">UPI</option>
+        <option value="Card">Card</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+    </select><br><br>
+
+    <label>Payment Date</label><br>
+    <input type="date" name="payment_date" required><br><br>
+
+    <label>Notes</label><br>
+    <textarea name="notes"></textarea><br><br>
+
+    <button type="submit">Add Payment</button>
+</form>
+
+<hr>
+
+<p><strong>Order Total:</strong> ₹{{ order.total_amount }}</p>
+
+<p><strong>Paid:</strong> ₹{{ paid }}</p>
+
+<p><strong>Remaining:</strong> ₹{{ remaining }}</p>
+
+{% if remaining == 0 %}
+    <p style="color:green;"><strong>Fully Paid ✅</strong></p>
+{% elif paid == 0 %}
+    <p style="color:red;"><strong>Payment Pending ❌</strong></p>
+{% else %}
+    <p style="color:orange;"><strong>Partially Paid 🟡</strong></p>
+{% endif %}
+
+<h2>Payment History</h2>
+
+{% if payments %}
+
+    {% for payment in payments %}
+
+        <p>₹{{ payment.amount }}</p>
+        <p>{{ payment.payment_method }}</p>
+        <p>{{ payment.payment_date }}</p>
+
+        <hr>
+
+        <a href="{{ url_for('delete_payment',
+                payment_id=payment.payment_id) }}">
+            <button>Delete</button>
+        </a>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No payments yet.</p>
+
+{% endif %}
