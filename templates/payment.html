@@ -13,23 +13,40 @@
 <form method="POST">
 
     <label>Amount</label><br>
-    <input type="number" name="amount" step="0.01" required><br><br>
+    <input type="number" name="amount" value="{{ payment.amount if payment else '' }}" step="0.01" required><br><br>
 
     <label>Payment Method</label><br>
     <select name="payment_method">
-        <option value="Cash">Cash</option>
-        <option value="UPI">UPI</option>
-        <option value="Card">Card</option>
-        <option value="Bank Transfer">Bank Transfer</option>
+        <option value="Cash"
+            {% if payment and payment.payment_method == "Cash" %}selected{% endif %}>
+            Cash
+        </option>
+
+        <option value="UPI"
+            {% if payment and payment.payment_method == "UPI" %}selected{% endif %}>
+            UPI
+        </option>
+
+        <option value="Card"
+            {% if payment and payment.payment_method == "Card" %}selected{% endif %}>
+            Card
+        </option>
+
+        <option value="Bank Transfer"
+            {% if payment and payment.payment_method == "Bank Transfer" %}selected{% endif %}>
+            Bank Transfer
+        </option>
     </select><br><br>
 
     <label>Payment Date</label><br>
-    <input type="date" name="payment_date" required><br><br>
+    <input type="date" name="payment_date" value="{{ payment.payment_date if payment else '' }}"required><br><br>
 
     <label>Notes</label><br>
-    <textarea name="notes"></textarea><br><br>
+    <textarea name="notes">{{ payment.notes if payment else '' }}</textarea><br><br>
 
-    <button type="submit">Add Payment</button>
+    <button type="submit">
+    {{ "Update Payment" if payment else "Add Payment" }}
+    </button>
 </form>
 
 <hr>
@@ -59,6 +76,11 @@
         <p>{{ payment.payment_date }}</p>
 
         <hr>
+
+        <a href="{{ url_for('edit_payment',
+                payment_id=payment.payment_id) }}">
+            <button>Edit</button>
+        </a>
 
         <a href="{{ url_for('delete_payment',
                 payment_id=payment.payment_id) }}">

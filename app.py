@@ -687,6 +687,96 @@ def delete_payment(payment_id):
         )
     )
 
+@app.route("/edit-payment/<int:payment_id>", methods=["GET", "POST"])
+def edit_payment(payment_id):
+
+    connection, cursor = get_cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM payment
+        WHERE payment_id = %s
+        """,
+        (payment_id,)
+    )
+
+    payment = cursor.fetchone()
+
+    order_id = payment["order_id"]
+  
+    if request.method == "POST":
+
+        amount = request.form["amount"]
+        payment_method = request.form["payment_method"]
+        payment_date = request.form["payment_date"]
+        notes = request.form["notes"]
+
+        cursor.execute(
+            """
+            UPDATE payment
+            SET
+                amount = %s,
+                payment_method = %s,
+                payment_date = %s,
+                notes = %s
+            WHERE payment_id = %s
+            """,
+            (
+                amount,
+                payment_method,
+                payment_date,
+                notes,
+                payment_id
+            )
+        )
+
+        connection.commit()
+
+        cursor.close()
+        connection.close()
+
+        return redirect(
+            url_for(
+                "payments",
+                order_id=order_id
+            )
+        )
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM orders
+        WHERE order_id = %s
+        """,
+        (order_id,)
+    )
+
+    order = cursor.fetchone()
+
+    customer_id = order["customer_id"]
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM customer
+        WHERE customer_id = %s
+        """,
+        (customer_id,)
+    )
+
+    customer = cursor.fetchone()
+
+    connection.close()
+    cursor.close()
+
+    return render_template(
+        "payment.html",
+        payment=payment,
+        order=order,
+        customer=customer
+    )
+
 
 if __name__ == "__main__":
     print(app.url_map)
